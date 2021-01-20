@@ -35,3 +35,11 @@ func (s *Service) FindByEmail(email string) (domain.User, error) {
 	}
 	return user, nil
 }
+
+func (s *Service) FindByUsername(username string) (domain.User, error) {
+	user, err := s.repo.FindByUsername(username)
+	if err != nil {
+		return domain.User{}, err
+	}
+	return user, nil
+}

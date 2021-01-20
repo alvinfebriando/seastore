@@ -63,6 +63,27 @@ func TestCreateAndFind(t *testing.T) {
 		assert.Errorf(t, err, "no user found")
 		assert.Equal(t, "", u.Email)
 	})
+
+	t.Run("FindByUsername should return a user with same username", func(t *testing.T) {
+		repo := repository.NewSliceRepository()
+		id := uuid.New()
+		newUser := domain.User{ID: id, Name: "TestName", Email: "TestEmail", Username: "TestUsername"}
+		repo.Create(newUser)
+		u, err := repo.FindByUsername("TestUsername")
+
+		assert.NoError(t, err)
+		assert.Equal(t, newUser.ID, u.ID)
+		assert.Equal(t, 1, repo.Count())
+	})
+
+	t.Run("FindByUsername should return error if no user with that username ", func(t *testing.T) {
+		repo := repository.NewSliceRepository()
+		u, err := repo.FindByUsername("fakeUsername")
+
+		assert.Error(t, err)
+		assert.Errorf(t, err, "no user found")
+		assert.Equal(t, "", u.Username)
+	})
 }
 
 // func TestUpdate(t *testing.T) {

@@ -37,3 +37,11 @@ func (r *repo) FindByEmail(email string) (domain.User, error) {
 	}
 	return domain.User{}, domain.ErrUserNotFound
 }
+func (r *repo) FindByUsername(username string) (domain.User, error) {
+	for _, v := range r.db {
+		if v.Username == username {
+			return v, nil
+		}
+	}
+	return domain.User{}, domain.ErrUserNotFound
+}

@@ -56,9 +56,31 @@ func (_m *UserService) FindByID(id uuid.UUID) (domain.User, error) {
 	return r0, r1
 }
 
+// FindByUsername provides a mock function with given fields: username
+func (_m *UserService) FindByUsername(username string) (domain.User, error) {
+	ret := _m.Called(username)
+
+	var r0 domain.User
+	if rf, ok := ret.Get(0).(func(string) domain.User); ok {
+		r0 = rf(username)
+	} else {
+		r0 = ret.Get(0).(domain.User)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(username)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Register provides a mock function with given fields:
 func (_m *UserService) Register() (domain.User, error) {
 	ret := _m.Called()
+
 	var r0 domain.User
 	if rf, ok := ret.Get(0).(func() domain.User); ok {
 		r0 = rf()

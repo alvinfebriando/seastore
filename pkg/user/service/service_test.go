@@ -72,4 +72,33 @@ func TestFind(t *testing.T) {
 		assert.Errorf(t, err, "no user found")
 		assert.Equal(t, "", result.Email)
 	})
+
+	t.Run("When FindByUsername with valid username, it should return the user", func(t *testing.T) {
+		repo := &mocks.UserRepository{Cache: make(map[uuid.UUID]domain.User)}
+		s := service.NewService(repo)
+		user := domain.User{Name: "TestName", Email: "TestEmail", Username: "TestUsername"}
+
+		repo.On("Create", mock.Anything)
+		repo.On("FindByID", mock.Anything).Return(user, nil)
+		repo.On("FindByUsername", mock.Anything).Return(user, nil)
+
+		s.Register(user)
+		searchedUser, err := s.FindByUsername(user.Username)
+
+		assert.NoError(t, err)
+		assert.Equal(t, user.Username, searchedUser.Username)
+	})
+
+	t.Run("When FindByUsername with wrong username, it should error", func(t *testing.T) {
+		repo := &mocks.UserRepository{}
+		s := service.NewService(repo)
+
+		repo.On("FindByUsername", mock.Anything).Return(domain.User{}, domain.ErrUserNotFound)
+
+		result, err := s.FindByUsername("")
+
+		assert.Error(t, err)
+		assert.Errorf(t, err, "no user found")
+		assert.Equal(t, "", result.Username)
+	})
 }
