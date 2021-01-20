@@ -72,7 +72,7 @@ func TestCreateAndFind(t *testing.T) {
 		u, err := repo.FindByUsername("TestUsername")
 
 		assert.NoError(t, err)
-		assert.Equal(t, newUser.ID, u.ID)
+		assert.Equal(t, newUser.Username, u.Username)
 		assert.Equal(t, 1, repo.Count())
 	})
 
